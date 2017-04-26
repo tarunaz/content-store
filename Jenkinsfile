@@ -28,7 +28,7 @@ volumes: [configMapVolume(configMapName: 'jenkins-maven-settings', mountPath: '/
                 try {
                         sh """
                         set -x
-                        mvn build-helper:parse-version versions:set -DnewVersion=\\\${parsedVersion.majorVersion}.\\\${parsedVersion.minorVersion}.\\\${parsedVersion.incrementalVersion}-\${BUILD_NUMBER}
+                        //mvn build-helper:parse-version versions:set -DnewVersion=\\\${parsedVersion.majorVersion}.\\\${parsedVersion.minorVersion}.\\\${parsedVersion.incrementalVersion}-\${BUILD_NUMBER}
                         mvn clean install
                         """
 
