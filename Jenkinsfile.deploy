@@ -12,7 +12,6 @@ volumes: [configMapVolume(configMapName: 'jenkins-maven-settings', mountPath: '/
 	def devProject = "content-store-int"
 	//def uatProject = "api-app-uat"
 	//def prodProject = "api-app-prod"
-	def version
 
     	def WORKSPACE = pwd()
 
@@ -20,7 +19,7 @@ volumes: [configMapVolume(configMapName: 'jenkins-maven-settings', mountPath: '/
 
                 login()
 		
-		deployApp(appName, devProject, version)
+		deployApp(appName, devProject)
 
                 validateDeployment(appName,devProject)
 
@@ -44,7 +43,7 @@ def parseVersion(String filename) {
 }
 
 
-def deployApp(appName, namespace, version) {
+def deployApp(appName, namespace) {
        sh """
           set -x
 
