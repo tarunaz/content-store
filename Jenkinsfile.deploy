@@ -19,10 +19,15 @@ volumes: [configMapVolume(configMapName: 'jenkins-maven-settings', mountPath: '/
         stage "Dev Deployment"
 
                 login()
+		
+		sh """
+                  set -x
 
-		currentOutputName=\$(oc get bc ${appName} -n ${devProject} --template='{{ .spec.output.to.name }}')
+		  currentOutputName=\$(oc get bc ${appName} -n ${devProject} --template='{{ .spec.output.to.name }}')
 
-		version=\${currentOutputName#*:}
+		  version=\${currentOutputName#*:}
+
+		"""
 			
 		deployApp(appName, devProject, version)
 
