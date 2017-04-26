@@ -43,6 +43,8 @@ volumes: [configMapVolume(configMapName: 'jenkins-maven-settings', mountPath: '/
         stage "OpenShift Dev Build"
 		 
 		version = parseVersion("${WORKSPACE}/pom.xml")
+		
+		echo version
 
                 login()
 
@@ -98,8 +100,8 @@ def parseVersion(String filename) {
 }
 
 def deployApp(appName, namespace, version) {
-            sh """
-          set +x
+       sh """
+          set -x
 
           newDeploymentImageName=${appName}:${version}
 
@@ -107,11 +109,11 @@ def deployApp(appName, namespace, version) {
 
           oc patch dc/${appName} -n ${namespace} -p "{\\"spec\\":{\\"template\\":{\\"spec\\":{\\"containers\\":[{\\"name\\":\\"${appName}\\",\\"image\\": \\"\${imageReference}\\" } ]}}, \\"triggers\\": [ { \\"type\\": \\"ImageChange\\", \\"imageChangeParams\\": { \\"containerNames\\": [ \\"${appName}\\" ], \\"from\\": { \\"kind\\": \\"ImageStreamTag\\", \\"name\\": \\"\${newDeploymentImageName}\\" } } } ] }}"
 
-          oc deploy ${appName} -n ${namespace} --latest
+          oc rollout latest dc ${appName} -n ${namespace}
 
           # Sleep for a few moments
           sleep 5
-        """
+       """
 
 
 }
@@ -119,7 +121,7 @@ def deployApp(appName, namespace, version) {
 def acceptanceCheck(String appName, String namespace) {
 
     sh """
-      set +x
+      set -x
 
       COUNTER=0
       DELAY=5
@@ -132,7 +134,7 @@ def acceptanceCheck(String appName, String namespace) {
       while [ \$COUNTER -lt \$MAX_COUNTER ]
       do
 
-        RESPONSE=\$(curl -s -o /dev/null -w '%{http_code}\\n' http://${appName}.${namespace}.svc.cluster.local:8080/rest/api/pods)
+        RESPONSE=\$(curl -s -o /dev/null -w '%{http_code}\\n' http://${appName}.${namespace}.cloudapps.rhc-lab.iad.redhat.com/rest/api/pods)
 
         if [ \$RESPONSE -eq 200 ]; then
             echo
