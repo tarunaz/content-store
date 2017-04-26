@@ -41,13 +41,13 @@ volumes: [configMapVolume(configMapName: 'jenkins-maven-settings', mountPath: '/
                 }
 
         stage "OpenShift Dev Build"
+		 
+		version = parseVersion("${WORKSPACE}/pom.xml")
+
+                login()
 
                 sh """
                   set -x
-
-		  login()
-
-		  version = parseVersion("${WORKSPACE}/pom.xml")
 
                   currentOutputName=\$(oc get bc ${appName} -n ${devProject} --template='{{ .spec.output.to.name }}')
 
