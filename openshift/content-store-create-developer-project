@@ -1,0 +1,67 @@
+#!/bin/bash
+
+DEV_NAME=$1
+
+APP_NAME=content-store
+
+DB_JNDI=jdbc/contentStoreDs
+MYSQL_USER=user
+MYSQL_PASSWORD=HelloWorld1!
+MYSQL_DATABASE=content_store
+
+SOURCE_REPOSITORY_URL=ssh://git@gitlab.consulting.redhat.com:2222/uspto/content-store.git
+SOURCE_REPOSITORY_REF=master
+
+DEVELOPER_TEMPLATE=uspto-tomcat8-developer
+
+ARTIFACT_DIR=cs-rest/target
+
+ENV_DEV=${APP_NAME}-dev-${DEV_NAME}
+
+echo
+echo "---------- ${ENV_DEV} ----------"
+
+echo
+echo Create OCP Project
+oc new-project ${ENV_DEV}
+oc project ${ENV_DEV}
+
+echo create jws-app-secret: server.crt and server.key
+openssl req -x509 -sha256 -nodes -days 365 -newkey rsa:2048 -subj '/CN=jws-https/OU=NAPS/O=consulting.redhat.com/L=Raleigh/S=NC/C=US' -keyout server.key -out server.crt
+SERVER_CRT_VALUE="$(cat server.crt | base64 -w 0)"
+SERVER_KEY_VALUE="$(cat server.key | base64 -w 0)"
+rm -f server.crt
+rm -f server.key
+
+echo
+echo Create COP Resources
+oc process openshift/template/${DEVELOPER_TEMPLATE} \
+  APP_NAME="${APP_NAME}" \
+  DB_JNDI=${DB_JNDI} \
+  MYSQL_USER="${MYSQL_USER}" \
+  MYSQL_PASSWORD="${MYSQL_PASSWORD}" \
+  MYSQL_DATABASE="${MYSQL_DATABASE}" \
+  SOURCE_REPOSITORY_URL="${SOURCE_REPOSITORY_URL}" \
+  SOURCE_REPOSITORY_REF="${SOURCE_REPOSITORY_REF}" \
+  SERVER_CRT_VALUE="${SERVER_CRT_VALUE}" \
+  SERVER_KEY_VALUE="${SERVER_KEY_VALUE}" \
+  ARTIFACT_DIR="${ARTIFACT_DIR}" \
+  | oc create -n ${ENV_DEV} -f -
+
+echo
+echo Wait 20 seconds for DB...
+sleep 20
+
+echo
+echo Initizalize DB
+./content-store-init-ocp-mysql-db "${MYSQL_USER}" "${MYSQL_PASSWORD}"
+
+echo
+echo '--------------------'
+WEBHOOK_URL=$(oc describe bc ${APP_NAME} | egrep "webhooks" | awk '{print $2;}' | egrep "generic")
+
+echo
+echo INSTRUCTIONS
+echo "    1. Add the following URL as a Webhook to the ${SOURCE_REPOSITORY_URL} Git project so that Jenkins will automatically kick off a new pipeline on a new commit."
+echo ''
+echo "        ${WEBHOOK_URL}"

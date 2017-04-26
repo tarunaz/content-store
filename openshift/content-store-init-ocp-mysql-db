@@ -1,0 +1,24 @@
+#!/bin/bash
+
+DB_USER=$1
+DB_PASSWORD=$2
+
+APP_NAME=content-store
+DB_NAME=content_store
+TOMCAT8_DC=${APP_NAME}
+
+echo
+echo Get MySQL POD
+MYSQL_POD=$(oc get pods | egrep "${APP_NAME}-" | egrep -v "deploy" | egrep '\-mysql-.*Running' | awk '{print $1;}')
+echo ${MYSQL_POD}
+
+echo
+echo Rsync SQL Data files
+oc rsync ../data/sql ${MYSQL_POD}:/var/lib/mysql/data
+
+echo
+echo Init MySQL DB
+oc rsh ${MYSQL_POD} bash -c 'mysql -u root < /var/lib/mysql/data/sql/V1__version.sql'
+oc rsh ${MYSQL_POD} bash -c "echo 'use ${DB_NAME}' | mysql -u root"
+
+

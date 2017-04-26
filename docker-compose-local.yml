@@ -1,0 +1,6 @@
+version: "2"
+
+services:
+  edh-service:
+    environment:
+      EDH_API_URI: "192.168.99.100:4001/edh-rest/rest"

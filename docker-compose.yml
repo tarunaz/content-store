@@ -1,0 +1,41 @@
+version: "2"
+
+services:
+  cs-service:
+    build: .
+    image: aeec/cs-service    
+    ports:
+      - "5001:8080"
+    links:
+      - cs-db
+      - cs-flyway-db
+    container_name: cs-service      
+    networks:
+      - cs-network
+  cs-db-data:
+    image: mysql:5.7
+    command: /bin/true
+    container_name: cs-db-data
+    networks:
+      - cs-network
+  cs-db:
+    image: mysql:5.7
+    volumes_from:
+      - cs-db-data
+    ports:
+      - "6306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: AEEC2016          
+    container_name: cs-db      
+    networks:
+      - cs-network
+  cs-flyway-db:
+    build: ./data/.
+    image: aeec/cs-flyway-db
+    networks:
+      - cs-network
+    links:
+      - cs-db
+    container_name: cs-flyway-db
+networks:
+  cs-network:

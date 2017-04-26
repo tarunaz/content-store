@@ -1,0 +1,25 @@
+content-store
+=
+
+File Summaries
+-
+
+**Jenkinsfile**
+
+ -*What it is:*
+
+In order for a Jenkins to manage this application's promotion pipeline, a Jenkinsfile must be included to direct Jenkins and tell it what stages to execute. This file includes stages that Jenkins executes on the project through the promotion pipeline, and must be present in the root folder of this directory. The file is referenced in the pipeline BuildConfig of the content-store application, called content-store-pipeline.
+
+ -*How do you use it:*
+
+The Jenkinsfile will not be manually harnessed at any stage of the build pipeline. It will be consumed by the Jenkins instance which will run the stages included.
+
+Directories
+-
+**logs**
+
+**mysql**
+
+**openshift**
+
+This directory houses the build scripts that demonstrate the functionality of the EDH application's builds (from source and binary) and promotion pipeline.

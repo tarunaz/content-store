@@ -1,0 +1,12 @@
+/Users/greensod/usptoWork/edh2/code/forOpenShift/content-store/cs-service/src/main/java/gov/uspto/openData/csService/service/ContentStoreService.java
+/Users/greensod/usptoWork/edh2/code/forOpenShift/content-store/cs-service/src/main/java/gov/uspto/openData/csService/model/FileMetadata.java
+/Users/greensod/usptoWork/edh2/code/forOpenShift/content-store/cs-service/src/main/java/gov/uspto/openData/csService/model/MimeType.java
+/Users/greensod/usptoWork/edh2/code/forOpenShift/content-store/cs-service/src/main/java/gov/uspto/openData/csService/model/FileData.java
+/Users/greensod/usptoWork/edh2/code/forOpenShift/content-store/cs-service/src/main/java/gov/uspto/openData/csService/util/ServiceConfiguration.java
+/Users/greensod/usptoWork/edh2/code/forOpenShift/content-store/cs-service/src/main/java/gov/uspto/openData/csService/service/DatabaseService.java
+/Users/greensod/usptoWork/edh2/code/forOpenShift/content-store/cs-service/src/main/java/gov/uspto/openData/csService/service/ContentStoreServiceImpl.java
+/Users/greensod/usptoWork/edh2/code/forOpenShift/content-store/cs-service/src/main/java/gov/uspto/openData/csService/service/DatabaseServiceImpl.java
+/Users/greensod/usptoWork/edh2/code/forOpenShift/content-store/cs-service/src/main/java/gov/uspto/openData/csService/service/s3/S3StorageServiceImpl.java
+/Users/greensod/usptoWork/edh2/code/forOpenShift/content-store/cs-service/src/main/java/gov/uspto/openData/csService/service/StorageService.java
+/Users/greensod/usptoWork/edh2/code/forOpenShift/content-store/cs-service/src/main/java/gov/uspto/openData/csService/model/FileVersion.java
+/Users/greensod/usptoWork/edh2/code/forOpenShift/content-store/cs-service/src/main/java/gov/uspto/openData/csService/model/FileArchive.java

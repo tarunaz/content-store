@@ -1,0 +1,28 @@
+apiVersion: v1
+kind: BuildConfig
+metadata:
+  creationTimestamp: null
+  labels:
+    app: content-store
+    template: uspto-generic-pipeline
+  name: content-store-pipeline
+spec:
+  nodeSelector: null
+  output: {}
+  postCommit: {}
+  resources: {}
+  runPolicy: Serial
+  source:
+    git:
+      ref: master
+      uri: ssh://git@gitlab.consulting.redhat.com:2222/uspto/content-store.git
+    type: Git
+    sourceSecret:
+      name: source-secret
+  strategy:
+    jenkinsPipelineStrategy:
+      jenkinsfilePath: Jenkinsfile
+    type: JenkinsPipeline
+  triggers: []
+status:
+  lastVersion: 0

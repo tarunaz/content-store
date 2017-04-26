@@ -1,0 +1,13 @@
+#!/bin/bash
+APP_NAME=content-store
+
+ENV_CICD="cicd"
+ENV_INT="${APP_NAME}-int"
+ENV_UAT="${APP_NAME}-uat"
+ENV_PROD="${APP_NAME}-prod"
+
+oc delete project ${ENV_INT}
+oc delete project ${ENV_UAT}
+oc delete project ${ENV_PROD}
+
+oc delete bc ${APP_NAME}-pipeline -n ${ENV_CICD}

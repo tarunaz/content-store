@@ -1,0 +1,12 @@
+gov/uspto/openData/csService/service/ContentStoreService.class
+gov/uspto/openData/csService/service/StorageService.class
+gov/uspto/openData/csService/model/MimeType.class
+gov/uspto/openData/csService/service/ContentStoreServiceImpl.class
+gov/uspto/openData/csService/service/DatabaseServiceImpl.class
+gov/uspto/openData/csService/util/ServiceConfiguration.class
+gov/uspto/openData/csService/model/FileVersion.class
+gov/uspto/openData/csService/model/FileData.class
+gov/uspto/openData/csService/model/FileArchive.class
+gov/uspto/openData/csService/service/DatabaseService.class
+gov/uspto/openData/csService/model/FileMetadata.class
+gov/uspto/openData/csService/service/s3/S3StorageServiceImpl.class

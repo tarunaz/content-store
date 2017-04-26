@@ -1,0 +1,5 @@
+gov/uspto/openData/csRest/AppInitializer.class
+gov/uspto/openData/csRest/resource/ContentStoreResource.class
+gov/uspto/openData/csRest/resource/ContentStoreResource$1.class
+gov/uspto/openData/csRest/mapper/NotFoundExceptionMapper.class
+gov/uspto/openData/csRest/JaxrsConfig.class
