@@ -31,7 +31,6 @@ volumes: [configMapVolume(configMapName: 'jenkins-maven-settings', mountPath: '/
                         mvn clean install -DskipTests
                         """
 
-                        step([$class: 'ArtifactArchiver', artifacts: '**/target/*.war, **/target/*.jar', fingerprint: true])
                 } catch(e) {
                         currentBuild.result = 'FAILURE'
                         throw e
