@@ -42,10 +42,6 @@ volumes: [configMapVolume(configMapName: 'jenkins-maven-settings', mountPath: '/
                   oc patch bc ${appName} -n ${devProject} -p "{ \\"spec\\": { \\"output\\": { \\"to\\": { \\"name\\": \\"\${newImageName}\\" } } } }"
 
 
-		  // mkdir -p '${WORKSPACE}/target/deployments'
-             	  // mv ./cs-rest/target/cs-rest.war '${WORKSPACE}/target/deployments'
-		  // --from-dir="${WORKSPACE}/target"
-
                   oc start-build ${appName} -n ${devProject} --follow=true --wait=true --from-file=./cs-rest/target/cs-rest.war
 
                 """
