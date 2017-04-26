@@ -48,7 +48,7 @@ def deployApp(appName, namespace, version) {
        sh """
           set -x
 
-          currentOutputName=\$(oc get bc ${appName} -n ${devProject} --template='{{ .spec.output.to.name }}')
+          currentOutputName=\$(oc get bc ${appName} -n ${namespace} --template='{{ .spec.output.to.name }}')
 
           version=\${currentOutputName#*:}
 
