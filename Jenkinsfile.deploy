@@ -44,7 +44,9 @@ def parseVersion(String filename) {
 
 
 def deployApp(appName, namespace) {
-       sh """
+        def version
+
+	sh """
           set -x
 
           currentOutputName=\$(oc get bc ${appName} -n ${namespace} --template='{{ .spec.output.to.name }}')
