@@ -26,12 +26,14 @@ volumes: [configMapVolume(configMapName: 'jenkins-maven-settings', mountPath: '/
         stage 'Maven Build'
 
                 try {
-                        sh """
-                        set -x
-                        mvn clean install -DskipTests
-                        """
+                     sh """
+                       set -x
+                       mvn clean install -DskipTests
+                     """
 
-                } catch(e) {
+		     step([$class: 'ArtifactArchiver', artifacts: '**/target/*.war, **/target/*.jar', fingerprint: true])
+                
+		} catch(e) {
                         currentBuild.result = 'FAILURE'
                         throw e
                 } finally {
@@ -40,22 +42,24 @@ volumes: [configMapVolume(configMapName: 'jenkins-maven-settings', mountPath: '/
 
         stage "OpenShift Dev Build"
 
-                version = parseVersion("${WORKSPACE}/pom.xml")
-
-                login()
-
                 sh """
-                set +x
+                  set -x
 
-                currentOutputName=\$(oc get bc ${appName} -n ${devProject} --template='{{ .spec.output.to.name }}')
+		  login()
 
-                newImageName=\${currentOutputName%:*}:${version}
+		  version = parseVersion("${WORKSPACE}/pom.xml")
 
-                oc patch bc ${appName} -n ${devProject} -p "{ \\"spec\\": { \\"output\\": { \\"to\\": { \\"name\\": \\"\${newImageName}\\" } } } }"
+                  currentOutputName=\$(oc get bc ${appName} -n ${devProject} --template='{{ .spec.output.to.name }}')
 
-                mkdir -p ${WORKSPACE}//target/s2i-build/deployments
-                cp ${WORKSPACE}//target/*.jar ${WORKSPACE}//target/s2i-build/deployments/
-                oc start-build ${appName} -n ${devProject} --follow=true --wait=true --from-dir="${WORKSPACE}//target/s2i-build"
+                  newImageName=\${currentOutputName%:*}:${version}
+
+                  oc patch bc ${appName} -n ${devProject} -p "{ \\"spec\\": { \\"output\\": { \\"to\\": { \\"name\\": \\"\${newImageName}\\" } } } }"
+
+
+		  mkdir -p '${WORKSPACE}/target/deployments'
+             	  mv ./cs-rest/target/cs-rest.war '${WORKSPACE}/target/deployments'
+
+                  oc start-build ${appName} -n ${devProject} --follow=true --wait=true --from-dir="${WORKSPACE}/target"
 
                 """
 
