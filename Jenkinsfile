@@ -1,6 +1,6 @@
 OC_LOG_LEVEL=3
 
-node ('maven') {
+node ('jdk8') {
 
     def WORKSPACE = pwd()
    
@@ -19,8 +19,8 @@ node ('maven') {
     stage 'Maven Build'
 
         // build the project
-	//mvnHome = tool 'M3'
-	sh "mvn clean package -DskipTests"
+	mvnHome = tool 'M3'
+	sh "${mvnHome}/bin/mvn clean package -DskipTests"
        
         // copy built artifiacts to staging directory for binary image build         
         sh """             
