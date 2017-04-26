@@ -28,7 +28,7 @@ volumes: [configMapVolume(configMapName: 'jenkins-maven-settings', mountPath: '/
                 try {
                         sh """
                         set -x
-                        mvn clean install
+                        mvn clean install -DskipTests
                         """
 
                         step([$class: 'ArtifactArchiver', artifacts: '**/target/*.war, **/target/*.jar', fingerprint: true])
