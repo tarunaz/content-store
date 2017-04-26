@@ -110,7 +110,7 @@ def deployApp(appName, namespace, version) {
 
           oc patch dc/${appName} -n ${namespace} -p "{\\"spec\\":{\\"template\\":{\\"spec\\":{\\"containers\\":[{\\"name\\":\\"${appName}\\",\\"image\\": \\"\${imageReference}\\" } ]}}, \\"triggers\\": [ { \\"type\\": \\"ImageChange\\", \\"imageChangeParams\\": { \\"containerNames\\": [ \\"${appName}\\" ], \\"from\\": { \\"kind\\": \\"ImageStreamTag\\", \\"name\\": \\"\${newDeploymentImageName}\\" } } } ] }}"
 
-          oc rollout latest dc ${appName} -n ${namespace}
+          oc rollout latest dc/${appName} -n ${namespace}
 
           # Sleep for a few moments
           sleep 5
