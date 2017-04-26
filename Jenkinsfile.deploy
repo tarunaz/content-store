@@ -12,16 +12,26 @@ volumes: [configMapVolume(configMapName: 'jenkins-maven-settings', mountPath: '/
 	def devProject = "content-store-int"
 	//def uatProject = "api-app-uat"
 	//def prodProject = "api-app-prod"
+	def version
 
     	def WORKSPACE = pwd()
 
         stage "Dev Deployment"
 
                 login()
-		
-		deployApp(appName, devProject)
 
-                validateDeployment(appName,devProject)
+		 sh """
+     		   set -x
+
+          	   currentOutputName=\$(oc get bc ${appName} -n ${namespace} --template='{{ .spec.output.to.name }}')
+
+                   version=\${currentOutputName#*:}
+		 """
+
+		
+		deployApp(appName, devProject, \${version})
+
+                validateDeployment(appName, devProject)
 
         }
 
@@ -43,15 +53,10 @@ def parseVersion(String filename) {
 }
 
 
-def deployApp(appName, namespace) {
-        def version
+def deployApp(appName, namespace, version) {
 
 	sh """
           set -x
-
-          currentOutputName=\$(oc get bc ${appName} -n ${namespace} --template='{{ .spec.output.to.name }}')
-
-          version=\${currentOutputName#*:}
 
 	  newDeploymentImageName=${appName}:${version}
 
