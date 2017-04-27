@@ -20,15 +20,6 @@ volumes: [configMapVolume(configMapName: 'jenkins-maven-settings', mountPath: '/
 
                 login()
 
-		 sh """
-     		   set -x
-
-          	   currentOutputName=\$(oc get bc ${appName} -n ${devProject} --template='{{ .spec.output.to.name }}')
-
-                   ${version}=\${currentOutputName#*:}
-		 """
-
-		
 		deployApp(appName, devProject, version)
 
                 validateDeployment(appName, devProject)
@@ -58,7 +49,11 @@ def deployApp(appName, namespace, version) {
 	sh """
           set -x
 
-	  newDeploymentImageName=${appName}:${version}
+	  currentOutputName=\$(oc get bc ${appName} -n ${namespace} --template='{{ .spec.output.to.name }}')
+
+          version=\${currentOutputName#*:}
+
+	  newDeploymentImageName=${appName}:\${version}
 
           imageReference=\$(oc get is ${appName} -n ${namespace} -o jsonpath="{.status.tags[?(@.tag==\\"${version}\\")].items[*].dockerImageReference}")
 
