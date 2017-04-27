@@ -5,7 +5,10 @@ volumes: [configMapVolume(configMapName: 'jenkins-maven-settings', mountPath: '/
           secretVolume(secretName: 'jenkins-nepemail-token-bfxfb', mountPath: '/etc/jenkins'),
           persistentVolumeClaim(claimName: 'maven-local-repo', mountPath: '/etc/.m2repo')]) {
 
-    	node('maven-ose') {
+    	
+	apply from: Jenkinsfile.deploy
+
+	node('maven-ose') {
         	container(name: 'maven', cloud: 'openshift') {
 
 	def appName = "content-store"
@@ -16,20 +19,23 @@ volumes: [configMapVolume(configMapName: 'jenkins-maven-settings', mountPath: '/
 
     	def WORKSPACE = pwd()
 
-        //def mvnHome = tool 'maven'
-        env.KUBECONFIG = pwd() + "/.kubeconfig"
-
         stage 'Checkout'
 
                 checkout scm
+
+	stage('Maven Build')
+                
+		sh """
+                  set -x
+		  mvn build-helper:parse-version versions:set -DnewVersion=1.0.0-FINAL
+                  mvn -s /etc/maven/settings.xml clean install -DskipTests
+                """
 
 
         stage "OpenShift Dev Build"
 		 
 		version = parseVersion("${WORKSPACE}/pom.xml")
 		
-		echo version
-
                 login()
 
                 sh """
