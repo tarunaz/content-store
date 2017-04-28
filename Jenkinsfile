@@ -1,4 +1,5 @@
 podTemplate(label: 'maven-ose', cloud: 'openshift', containers: [
+  containerTemplate(name: 'jnlp', image: 'registry.access.redhat.com/openshift3/jenkins-slave-maven-rhel7', args: '${computer.jnlpmac} ${computer.name}'),
   containerTemplate(name: 'maven', image: "registry.access.redhat.com/openshift3/jenkins-slave-maven-rhel7", ttyEnabled: true, command: 'cat', workingDir: '/home/jenkins'),
 ],
 volumes: [configMapVolume(configMapName: 'jenkins-maven-settings', mountPath: '/etc/maven'),
@@ -27,7 +28,7 @@ volumes: [configMapVolume(configMapName: 'jenkins-maven-settings', mountPath: '/
                 
 		sh """
                   set -x
-		  mvn build-helper:parse-version versions:set -DnewVersion=1.0.0-FINAL
+		  //mvn build-helper:parse-version versions:set -DnewVersion=1.0.0-FINAL
                   mvn -s /etc/maven/settings.xml clean install -DskipTests
                 """
 
