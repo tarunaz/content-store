@@ -39,5 +39,10 @@
 
 <Resource auth="Container" driverClassName="com.mysql.jdbc.Driver" maxActive="20" maxIdle="10" maxWait="-1" name="jdbc/contentStoreDs" password="test" testOnBorrow="false" testOnReturn="false" testWhileIdle="true" timeBetweenEvictionRunsMillis="1800000" type="javax.sql.DataSource" url="jdbc:mysql://content-store-mysql-tarun-edh-dev.cloudapps.rhc-lab.iad.redhat.com:3306/content_store?jdbcCompliantTruncation=false&amp;zeroDateTimeBehavior=convertToNull" username="test"/>
 
+<!--
+ <Resource auth="Container" driverClassName="com.mysql.jdbc.Driver" maxActive="20" maxIdle="10" maxWait="-1" name="jdbc/contentStoreDs" password="AEEC2016" testOnBorrow="false" testOnReturn="false" testWhileIdle="true" timeBetweenEvictionRunsMillis="1800000" type="javax.sql.DataSource" url="jdbc:mysql://cs-db:3306/content_store?jdbcCompliantTruncation=false&amp;zeroDateTimeBehavior=convertToNull" username="root"/> 
+-->
+
+    <Resource auth="Container" driverClassName="com.mysql.jdbc.Driver" maxActive="20" maxIdle="10" maxWait="-1" name="jdbc/contentStoreDs" password="AEEC2016" testOnBorrow="false" testOnReturn="false" testWhileIdle="true" timeBetweenEvictionRunsMillis="1800000" type="javax.sql.DataSource" url="jdbc:mysql://cs-db:3306/content_store?jdbcCompliantTruncation=false&amp;zeroDateTimeBehavior=convertToNull" username="root"/>
     
 </Context>
